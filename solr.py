@@ -1,5 +1,8 @@
 import pysolr
 import csv
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 # https://confusedcoders.com/data-engineering/search/solr/indexing-csv-data-in-solr-via-python-pysolr
 # http://efimeres.com/2016/02/pysolr-solr/
@@ -35,8 +38,10 @@ with open('sites.csv') as csv_file:
             print str(row[2])
             try:
                 formatted_coords = str(coords[1]) + "," + str(coords[0])
+                # filter if geom is not valid
                 if str(coords[1]) == "?":
-                   continue 
+                   continue
+                # filter if geom not numeric
                 try:
                     float(str(coords[1]))
                 except ValueError:
