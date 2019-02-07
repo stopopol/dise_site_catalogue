@@ -16,13 +16,13 @@ data = json.loads(response.read())
 counter = 0
 
 with open('sites.csv', mode='ab') as sites_file:
-    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for x in data['nodes']:
         # limit the amount of processed records
-        counter = counter+1
-        if counter == 50:
-           break    
+        #counter = counter+1
+        #if counter == 50:
+        #   break    
         #print(x['node']['deimsid'] + '; ' + x['node']['path'])
         #print x['node']['path']
 
@@ -47,7 +47,7 @@ with open('sites.csv', mode='ab') as sites_file:
                         lat = coordinate_pair[0]
                         lon = coordinate_pair[1]
                         wkt_coordinates = "POINT (" + lon + " " + lat + ")"
-                        site_writer.writerow([site_name, site_description, wkt_coordinates,'deims'])
+                        site_writer.writerow([site_name, wkt_coordinates,'deims', site_description])
         
 
     #{http://inspire.ec.europa.eu/schemas/ef/4.0}responsibleParty"):

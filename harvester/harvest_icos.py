@@ -1,7 +1,7 @@
 # Script to harvest site records from ICOS
 #
 # https://meta.icos-cp.eu/sparqlclient/?type=CSV
-
+# https://www.icos-cp.eu/stations
 import urllib, json, sparql, csv
 # sparql-client has to be installed
 
@@ -46,7 +46,7 @@ statement = """PREFIX cpst: <http://meta.icos-cp.eu/ontologies/stationentry/>
 
 result = s.query(statement)
 with open('sites.csv', mode='ab') as sites_file:
-    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for row in result.fetchone():
         site_name = str(row[5])
@@ -56,4 +56,4 @@ with open('sites.csv', mode='ab') as sites_file:
         wkt_coordinates = "POINT (" + lon + " " + lat + ")"
         # <class 'sparql.Literal'>
 
-        site_writer.writerow([site_name, site_description, wkt_coordinates,'icos'])
+        site_writer.writerow([site_name, wkt_coordinates,'icos', site_description])

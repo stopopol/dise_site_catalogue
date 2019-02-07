@@ -19,7 +19,7 @@ for url in list_of_subnetworks:
 
   
   with open('sites.csv', mode='ab') as sites_file:
-    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for x in data['features']:
       site_name = x['properties']['name']
@@ -28,4 +28,4 @@ for url in list_of_subnetworks:
       lon  = x['properties']['longitude']
       wkt_coordinates = "POINT (" + lon + " " + lat + ")"
       
-      site_writer.writerow([site_name, site_description, wkt_coordinates,'nemsr'])
+      site_writer.writerow([site_name, wkt_coordinates,'nemsr', site_description])
