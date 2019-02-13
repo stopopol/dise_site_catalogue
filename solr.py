@@ -1,4 +1,5 @@
 import pysolr
+import requests
 import csv
 import sys
 reload(sys)
@@ -19,8 +20,9 @@ solr.delete(q='*:*')
 #        "id": "test_1",
 #        "site_name": "zoebelboden", 
 #        "geom": "16,38",
-#        "description": "test record for data ingestion",
 #        "catalogue:": "catalogue",
+#        "description": "test record for data ingestion",
+#        "country": "Austria",
 #    }
 #])
 
@@ -32,10 +34,14 @@ with open('sites.csv') as csv_file:
             line_count += 1
         else:
             line_count += 1
-            geom = row[1]
+            geom = row[0]
             coords = geom[7:-1].split()
             # catalogue
-            print str(row[2])
+            try:
+                catalogue = str(row[4])
+            except:
+                print "catalogue couldn't be parsed"
+                catalogue = "error"
             try:
                 formatted_coords = str(coords[1]) + "," + str(coords[0])
                 # filter if geom is not valid
@@ -45,17 +51,30 @@ with open('sites.csv') as csv_file:
                 try:
                     float(str(coords[1]))
                 except ValueError:
-                    continue
+                    formatted_coords = "0,0"
             except IndexError:
                 formatted_coords = "0,0"
 
+            try:
+                country = str(row[1])
+            except IndexError:
+                country = "undefined"
+
+            print str(row[2])
             print line_count
+
             solr.add([  
                 {
                     "id": line_count,
-                    "site_name": str(row[0]),
+                    "site_name": str(row[3]),
                     "geom": formatted_coords,
-                    "catalogue": str(row[2]),
-                    "description": str(row[3]),
+                    "catalogue": catalogue,
+                    "description": str(row[5]),
+                    "country": country,
+                    "site_url": str(row[2])
                 }
             ])
+
+
+# reload solr core
+reload_core = requests.get('http://geograph01.umweltbundesamt.at:8983/solr/admin/cores?action=RELOAD&core=sites')
