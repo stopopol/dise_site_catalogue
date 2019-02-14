@@ -49,7 +49,7 @@ statement = """PREFIX cpst: <http://meta.icos-cp.eu/ontologies/stationentry/>
             """
 counter = 0
 result = s.query(statement)
-with open('sites.csv', mode='ab') as sites_file:
+with open('sites.csv', mode='ab', buffering = 0) as sites_file:
     site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for row in result.fetchone():
@@ -63,12 +63,12 @@ with open('sites.csv', mode='ab') as sites_file:
 
         ready_coords = [lat, lon]
         try:
-            #country = "Carbon-Phantasia"
-            location = geolocator.reverse(ready_coords, language='en', timeout=5)
-            country = location.raw['address']['country']
+            country = "Carbon-Phantasia"
+            #location = geolocator.reverse(ready_coords, language='en')
+            #country = location.raw['address']['country']
         except GeocoderTimedOut as e:
             country = "timeout"
         site_writer.writerow([wkt_coordinates, country, site_id, site_name,'ICOS', site_description])
-        time.sleep(2)
+        time.sleep(1.1)
 
 print "Processed ICOS records: " + str(counter)

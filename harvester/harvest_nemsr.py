@@ -20,7 +20,7 @@ for url in list_of_subnetworks:
   data = json.loads(response.read())
 
   counter = 0
-  with open('sites.csv', mode='ab') as sites_file:
+  with open('sites.csv', mode='ab', buffering = 0) as sites_file:
     site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for x in data['features']:

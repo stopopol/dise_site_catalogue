@@ -21,7 +21,7 @@ response = urllib.urlopen(url)
 data = json.loads(response.read())
 counter = 0
 
-with open('sites.csv', mode='ab') as sites_file:
+with open('sites.csv', mode='ab', buffering = 0) as sites_file:
     site_writer = csv.writer(sites_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 
     for x in data['nodes']:
@@ -68,9 +68,9 @@ with open('sites.csv', mode='ab') as sites_file:
                             ts = time.time()
                             st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
                             print st
-                            #country = "Phantasia"
-                            location = geolocator.reverse(ready_coords, language='en')
-                            country = location.raw['address']['country']
+                            country = "Phantasia"
+                            #location = geolocator.reverse(ready_coords, language='en')
+                            #country = location.raw['address']['country']
 
                         except GeocoderTimedOut:
                             country = "timeout"
@@ -78,11 +78,9 @@ with open('sites.csv', mode='ab') as sites_file:
                             country = "undefined"
                         
                         site_writer.writerow([wkt_coordinates, country, site_id, site_name,'deims', site_description])
-                        time.sleep(2)
+                        time.sleep(1.1)
 
     print "Processed DEIMS-SDR records: " + str(counter)
-
-
 
     #{http://inspire.ec.europa.eu/schemas/ef/4.0}responsibleParty"):
     #{http://inspire.ec.europa.eu/schemas/ef/4.0}responsibleParty"):
