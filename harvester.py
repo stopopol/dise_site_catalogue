@@ -1,6 +1,7 @@
 import os
 import csv
 import subprocess
+import time
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -15,7 +16,8 @@ deims_path = os.path.dirname(os.path.abspath(__file__)) + "\harvester\harvest_de
 icos_path = os.path.dirname(os.path.abspath(__file__))  + "\harvester\harvest_icos.py"
 nemsr_path = os.path.dirname(os.path.abspath(__file__)) + "\harvester\harvest_nemsr.py"
 
-subprocess.Popen(nemsr_path, shell=True)
-subprocess.Popen(deims_path, shell=True)
-subprocess.Popen(icos_path, shell=True)
+# communicate is necessary, otherwise the subprocesses run in parallel and the csv will be flawed
+subprocess.Popen(nemsr_path, shell=True).communicate() 
+subprocess.Popen(deims_path, shell=True).communicate() 
+subprocess.Popen(icos_path, shell=True).communicate() 
 
